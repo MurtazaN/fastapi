@@ -1,6 +1,6 @@
 from sklearn.tree import DecisionTreeClassifier
 import joblib
-from data import load_data, split_data
+from src.data import load_data, split_data
 
 def fit_model(X_train, y_train):
     """
