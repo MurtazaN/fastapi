@@ -1,0 +1,2 @@
+# fastapi
+lab for mlops
