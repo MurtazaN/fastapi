@@ -2,6 +2,11 @@ import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder
 import numpy as np
 import joblib
+from pathlib import Path
+
+# Dynamically find the root fastapi/ directory
+BASE_DIR = Path(__file__).parent.parent
+MODEL_DIR = BASE_DIR / "model"
 
 def engineer_target_and_features(df: pd.DataFrame, is_training: bool = True):
     """
@@ -27,7 +32,7 @@ def engineer_target_and_features(df: pd.DataFrame, is_training: bool = True):
         "savings_to_income_ratio", 
         "debt_to_income_ratio"
     ]
-    X = df.drop(columns=[col for col in columns_to_drop if col in df.columns], axis=1)
+    X = df.drop(columns=[col for col in columns_to_drop if col in df.columns]) #, axis=1)
 
     # 3. Handle Categorical Features
     categorical_cols = ["gender", "education_level", "employment_status", "job_title", "has_loan", "loan_type", "region"]
@@ -37,10 +42,13 @@ def engineer_target_and_features(df: pd.DataFrame, is_training: bool = True):
         # Fit global encoder and save it
         encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=-1)
         X[existing_cat_cols] = encoder.fit_transform(X[existing_cat_cols])
-        joblib.dump(encoder, "model/categorical_encoder.pkl")
+        
+        # Ensure model directory exists
+        MODEL_DIR.mkdir(exist_ok=True)
+        joblib.dump(encoder, MODEL_DIR / "categorical_encoder.pkl")
     else:
         # Load fitted encoder during inference
-        encoder = joblib.load("model/categorical_encoder.pkl")
+        encoder = joblib.load(MODEL_DIR / "categorical_encoder.pkl")
         X[existing_cat_cols] = encoder.transform(X[existing_cat_cols])
 
     return X, y

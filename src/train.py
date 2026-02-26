@@ -3,6 +3,10 @@ import joblib
 from src.data import load_data, split_data
 from xgboost import XGBClassifier
 from src.features import engineer_target_and_features
+from pathlib import Path
+
+BASE_DIR = Path(__file__).parent.parent
+MODEL_DIR = BASE_DIR / "model"
 
 
 def fit_model_iris(X_train, y_train):
@@ -14,7 +18,8 @@ def fit_model_iris(X_train, y_train):
     """
     dt_classifier = DecisionTreeClassifier(max_depth=3, random_state=12)
     dt_classifier.fit(X_train, y_train)
-    joblib.dump(dt_classifier, "model/iris_model.pkl")
+    MODEL_DIR.mkdir(exist_ok=True)
+    joblib.dump(dt_classifier, MODEL_DIR / "iris_model.pkl")
 
 
 def fit_model_financial(X_train, y_train):
@@ -26,7 +31,8 @@ def fit_model_financial(X_train, y_train):
     """
     xgb_classifier = XGBClassifier(max_depth=3, random_state=12)
     xgb_classifier.fit(X_train, y_train)
-    joblib.dump(xgb_classifier, "model/financial_model.pkl")
+    MODEL_DIR.mkdir(exist_ok=True)
+    joblib.dump(xgb_classifier, MODEL_DIR / "financial_model.pkl")
 
 if __name__ == "__main__":
     # Load raw dataframe

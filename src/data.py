@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
+from pathlib import Path
+
+BASE_DIR = Path(__file__).parent.parent
+DATA_DIR = BASE_DIR / "data"
 
 def load_data_iris():
     """
@@ -19,7 +23,7 @@ def load_data():
     """
     Load the raw financial dataset. Feature engineering is delegated to src.features.
     """
-    df = pd.read_csv("data/final_data.csv")
+    df = pd.read_csv(DATA_DIR / "financial_data.csv")
     return df
     
 def split_data(X, y):

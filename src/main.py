@@ -1,6 +1,8 @@
 from fastapi import FastAPI, status, HTTPException
 from pydantic import BaseModel
-from src.predict import predict_data
+# from src.predict import predict_data
+from src.predict import predict_data_financial
+from src.schemas import FinancialRequest, FinancialResponse
 
 
 app = FastAPI()
@@ -22,8 +24,6 @@ class IrisData(BaseModel):
 
 class IrisResponse(BaseModel):
     response:int
-
-from src.schemas import FinancialRequest, FinancialResponse
 
 
 """Modern web apps use a technique named routing. This helps the user remember the URLs. 
@@ -78,9 +78,27 @@ async def health_ping():
 async def predict_finance(financial_features: FinancialRequest):
     """
     Predict whether a user is in a 'good financial condition'.
+
+    {
+        "age": 56,
+        "gender": "Female",
+        "education_level": "High School",
+        "employment_status": "Self-employed",
+        "job_title": "Salesperson",
+        "monthly_income_usd": 3531.69,
+        "monthly_expenses_usd": 1182.59,
+        "savings_usd": 367655.03,
+        "has_loan": "No",
+        "loan_type": "None",
+        "loan_amount_usd": 0.0,
+        "loan_term_months": 0,
+        "monthly_emi_usd": 0.0,
+        "loan_interest_rate_pct": 0.0,
+        "region": "Other"
+    }
     """
+
     try:
-        from src.predict import predict_data_financial
         # Convert pydantic model to a dictionary to pass to our preprocessing function
         request_dict = financial_features.model_dump()
         
