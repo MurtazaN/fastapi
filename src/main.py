@@ -23,6 +23,7 @@ class IrisData(BaseModel):
 class IrisResponse(BaseModel):
     response:int
 
+from src.schemas import FinancialRequest, FinancialResponse
 
 
 """Modern web apps use a technique named routing. This helps the user remember the URLs. 
@@ -34,45 +35,61 @@ async def health_ping():
     """Concurrent (multiple tasks can run simultaneously)"""
     return {"status": "healthy"}
 
-@app.post("/predict", response_model=IrisResponse)
-async def predict_iris(iris_features: IrisData):
+# @app.post("/predict", response_model=IrisResponse)
+# async def predict_iris(iris_features: IrisData):
+#     """
+#     Predict the iris flower species based on provided features.
+#     This endpoint accepts iris flower measurements and returns the predicted species class.
+#     Args:
+#         iris_features (IrisData): An IrisData object containing:
+#             - sepal_length (float): Length of the sepal in cm
+#             - sepal_width (float): Width of the sepal in cm
+#             - petal_length (float): Length of the petal in cm
+#             - petal_width (float): Width of the petal in cm
+#     Returns:
+#         IrisResponse: A response object containing:
+#             - response (int): The predicted iris species class (0, 1, or 2)
+#     Raises:
+#         HTTPException: Returns a 500 status code with error details if prediction fails.
+#     Example:
+#         POST /predict
+#         {
+#             "sepal_length": 5.1,
+#             "sepal_width": 3.5,
+#             "petal_length": 1.4,
+#             "petal_width": 0.2
+#         }
+#         Response:
+#         {
+#             "response": 0
+#         }
+#     """
+#     try:
+#         features = [[iris_features.sepal_length, iris_features.sepal_width,
+#                     iris_features.petal_length, iris_features.petal_width]]
+
+#         prediction = predict_data(features)
+#         return IrisResponse(response=int(prediction[0]))
+    
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/predict/finance", response_model=FinancialResponse)
+async def predict_finance(financial_features: FinancialRequest):
     """
-    Predict the iris flower species based on provided features.
-    This endpoint accepts iris flower measurements and returns the predicted species class.
-    Args:
-        iris_features (IrisData): An IrisData object containing:
-            - sepal_length (float): Length of the sepal in cm
-            - sepal_width (float): Width of the sepal in cm
-            - petal_length (float): Length of the petal in cm
-            - petal_width (float): Width of the petal in cm
-    Returns:
-        IrisResponse: A response object containing:
-            - response (int): The predicted iris species class (0, 1, or 2)
-    Raises:
-        HTTPException: Returns a 500 status code with error details if prediction fails.
-    Example:
-        POST /predict
-        {
-            "sepal_length": 5.1,
-            "sepal_width": 3.5,
-            "petal_length": 1.4,
-            "petal_width": 0.2
-        }
-        Response:
-        {
-            "response": 0
-        }
+    Predict whether a user is in a 'good financial condition'.
     """
     try:
-        features = [[iris_features.sepal_length, iris_features.sepal_width,
-                    iris_features.petal_length, iris_features.petal_width]]
-
-        prediction = predict_data(features)
-        return IrisResponse(response=int(prediction[0]))
-    
+        from src.predict import predict_data_financial
+        # Convert pydantic model to a dictionary to pass to our preprocessing function
+        request_dict = financial_features.model_dump()
+        
+        # Get raw numpy array prediction [0] or [1]
+        prediction = predict_data_financial(request_dict)
+        pred_val = int(prediction[0])
+        
+        status_label = "Good" if pred_val == 1 else "Needs Improvement"
+        return FinancialResponse(prediction=pred_val, status_label=status_label)
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-
-
-    

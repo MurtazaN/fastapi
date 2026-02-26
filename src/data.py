@@ -16,10 +16,11 @@ def load_data_iris():
     return X, y
 
 def load_data():
+    """
+    Load the raw financial dataset. Feature engineering is delegated to src.features.
+    """
     df = pd.read_csv("data/final_data.csv")
-    X = df.drop("target", axis=1)
-    y = df["target"]
-    return X, y
+    return df
     
 def split_data(X, y):
     """
