@@ -1,8 +1,13 @@
 import numpy as np
+import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
+from pathlib import Path
 
-def load_data():
+BASE_DIR = Path(__file__).parent.parent
+DATA_DIR = BASE_DIR / "data"
+
+def load_data_iris():
     """
     Load the Iris dataset and return the features and target values.
     Returns:
@@ -14,6 +19,13 @@ def load_data():
     y = iris.target
     return X, y
 
+def load_data():
+    """
+    Load the raw financial dataset. Feature engineering is delegated to src.features.
+    """
+    df = pd.read_csv(DATA_DIR / "financial_data.csv")
+    return df
+    
 def split_data(X, y):
     """
     Split the data into training and testing sets.
