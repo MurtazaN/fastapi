@@ -1,0 +1,8 @@
+# data
+data/
+
+# venv
+venv/
+fastapi-lab/
+
+__pycache__/
