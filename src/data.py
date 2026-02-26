@@ -1,8 +1,9 @@
 import numpy as np
+import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
-def load_data():
+def load_data_iris():
     """
     Load the Iris dataset and return the features and target values.
     Returns:
@@ -14,6 +15,12 @@ def load_data():
     y = iris.target
     return X, y
 
+def load_data():
+    df = pd.read_csv("data/final_data.csv")
+    X = df.drop("target", axis=1)
+    y = df["target"]
+    return X, y
+    
 def split_data(X, y):
     """
     Split the data into training and testing sets.
