@@ -2,6 +2,7 @@ from sklearn.tree import DecisionTreeClassifier
 import joblib
 from src.data import load_data, split_data
 from xgboost import XGBClassifier
+from src.features import engineer_target_and_features
 
 
 def fit_model_iris(X_train, y_train):
@@ -15,16 +16,6 @@ def fit_model_iris(X_train, y_train):
     dt_classifier.fit(X_train, y_train)
     joblib.dump(dt_classifier, "model/iris_model.pkl")
 
-if __name__ == "__main__":
-    from src.features import engineer_target_and_features
-    # Load raw dataframe
-    df_raw = load_data()
-    # Engineer targets and features (and save the fitted categorical encoders!)
-    X, y = engineer_target_and_features(df_raw, is_training=True)
-    # Split the processed data
-    X_train, X_test, y_train, y_test = split_data(X, y)
-    # Train and save the XGBoost model
-    fit_model_financial(X_train, y_train)
 
 def fit_model_financial(X_train, y_train):
     """
@@ -36,3 +27,13 @@ def fit_model_financial(X_train, y_train):
     xgb_classifier = XGBClassifier(max_depth=3, random_state=12)
     xgb_classifier.fit(X_train, y_train)
     joblib.dump(xgb_classifier, "model/financial_model.pkl")
+
+if __name__ == "__main__":
+    # Load raw dataframe
+    df_raw = load_data()
+    # Sent to features.py to engineer targets and features (and save the fitted categorical encoders!)
+    X, y = engineer_target_and_features(df_raw, is_training=True)
+    # Split the processed data
+    X_train, X_test, y_train, y_test = split_data(X, y)
+    # Send to fit_model_financial to train and save the XGBoost model
+    fit_model_financial(X_train, y_train)
