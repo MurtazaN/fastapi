@@ -5,23 +5,27 @@ I exposed ML models as APIs using [FastAPI](https://fastapi.tiangolo.com/) and [
 2. **uvicorn**: Uvicorn is an [Asynchronous Server Gateway Interface - ASGI](https://youtu.be/vKjCkeJGbNk) web server implementation for Python. It is often used to serve FastAPI aplications.
 
 The workflow involves the following steps:
-1. Training an XGBoost Classifier on a Personal Finance Dataset.
+1. Training an XGBoost Classifier on a [Personal Finance Dataset](https://www.kaggle.com/datasets/miadul/personal-finance-ml-dataset).
 2. Serving the trained model via a REST API endpoint using FastAPI and uvicorn to predict an individual's financial condition.
 
 ## Setup
 
-1. Create a virtual environment (e.g. `fastapi_env`):
+1. **Download the Dataset**:
+   - Download the [Personal Finance Dataset](https://www.kaggle.com/datasets/miadul/personal-finance-ml-dataset) from Kaggle.
+   - Create a `data/` directory in the project root: `mkdir data`.
+   - Place the downloaded CSV file into the `data/` directory and ensure it is named `financial_data.csv`.
+2. Create a virtual environment (e.g. `fastapi_env`):
    ```bash
    python3 -m venv fastapi_env
    ```
-2. Activate the environment:
+3. Activate the environment:
    - On macOS/Linux: `source fastapi_env/bin/activate`
    - On Windows: `fastapi_env\Scripts\activate`
-3. Install the required packages using:
+4. Install the required packages using:
    ```bash
    pip install -r requirements.txt
    ```
-4. Install the project in editable mode so imports resolve correctly:
+5. Install the project in editable mode so imports resolve correctly:
    ```bash
    pip install -e .
    ```
