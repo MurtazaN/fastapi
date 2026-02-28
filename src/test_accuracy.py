@@ -7,10 +7,8 @@ from sklearn.model_selection import train_test_split
 from src.data import load_data
 from src.features import engineer_target_and_features
 
-
 BASE_DIR = Path(__file__).parent.parent
 MODEL_DIR = BASE_DIR / "model"
-
 
 def main():
     '''
